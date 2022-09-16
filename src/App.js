@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Posts from './Posts';
 
@@ -14,11 +14,7 @@ function App() {
 
   }
 
-  useEffect(() => {
-    getallPosts();
-  }, [
 
-  ])
   const Addpost = async (e) => {
     e.preventDefault();
     const title = e.target.title.value;
@@ -27,13 +23,13 @@ function App() {
       title: title,
       content: content
     }
-    const addpost = await axios.post('https://adarbeh-api.herokuapp.com/post', newPost);
-    setPosts(addpost.data);
-    setShowdata(true);
-    
-  
+     await axios.post('https://adarbeh-api.herokuapp.com/post', newPost);
+    getallPosts();
   }
 
+  useEffect(() => {
+    getallPosts();
+  });
 
   return (
     <div>
@@ -42,12 +38,12 @@ function App() {
 
       <form onSubmit={Addpost} className='form'>
         <label htmlFor="" className='yorttit'>YOR TITEL</label>
-        <input type="text" name='title' className='input'/>
+        <input type="text" name='title' className='input' />
 
         <label htmlFor="" className='yorttit'>YOUR CONTENT</label>
         <input type="text" name='content' className='input' />
 
-        <input type="submit" value="Add post"className='sub' />
+        <input type="submit" value="Add post" className='sub' />
       </form>
       {
         showdata &&
@@ -57,7 +53,7 @@ function App() {
 
 
     </div>
-    
+
   );
 }
 

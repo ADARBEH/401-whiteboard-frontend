@@ -10,6 +10,7 @@ export default function Posts(props) {
   }
   useEffect(() => {
     handleDelete();
+    handleaddcomment();
   }, [])
 
   const handleaddcomment = async (e,id) => {
