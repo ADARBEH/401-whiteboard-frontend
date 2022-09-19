@@ -146,3 +146,40 @@ font-size: 20px;
   cursor: pointer;
   border-radius: 10px;
 }
+.Signup{
+  background-color: rgba(115, 124, 143, 0.71); /* Green */
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+.Login{
+  background-color: rgba(115, 124, 143, 0.71); /* Green */
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+.div-sing{
+ display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 150px;
+}
+.parg{
+  font-size: 40px;
+  color: #182236;
+display: flex;
+  align-items: center;
+  justify-content: center;
+}

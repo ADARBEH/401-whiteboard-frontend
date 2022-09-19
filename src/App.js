@@ -1,58 +1,92 @@
-import axios from 'axios';
-import { useState, useEffect } from 'react';
+
 import './App.css';
-import Posts from './Posts';
+import React from 'react';
+import Datauser from './components/Datauser';
+import base64 from 'base-64';
+import { When } from 'react-if';
 
+
+
+import axios from 'axios';
+import { useState } from 'react';
 function App() {
-  const [posts, setPosts] = useState([]);
-  const [showdata, setShowdata] = useState(false);
-
-  const getallPosts = async () => {
-    const allpost = await axios.get('https://adarbeh-api.herokuapp.com/post');
-    setPosts(allpost.data);
-    setShowdata(true)
-
-  }
+  const [login, setLogin] = useState(false);
 
 
-  const Addpost = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    const title = e.target.title.value;
-    const content = e.target.content.value;
-    const newPost = {
-      title: title,
-      content: content
+    try {
+      const data = {
+        userName: e.target.username.value,
+        email: e.target.email.value,
+        password: e.target.password.value
+      };
+      const signup = await axios.post('https://whiteboard-backend-ad.herokuapp.com/signup', data);
+      console.log(signup.data);
     }
-     await axios.post('https://adarbeh-api.herokuapp.com/post', newPost);
-    getallPosts();
+    catch (err) {
+      console.log(err);
+    }
   }
 
-  useEffect(() => {
-    getallPosts();
-  });
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const data = {
+      username: e.target.email.value,
+      password: e.target.password.value
+    };
+
+    const encodedCredintial = base64.encode(`${data.username}:${data.password}`);
+    console.log(`Basic ${encodedCredintial}`)
+    axios.post('https://whiteboard-backend-ad.herokuapp.com/login', {}, {
+      headers: {
+        Authorization: `Basic ${encodedCredintial}`
+      }
+    })
+      .then(res => {
+        console.log(res.data)
+        setLogin(true);
+      })
+      .catch(err => console.log(err));
+  }
 
   return (
-    <div>
+    <>
 
-      <h1 className='welcome'>Give Me Post</h1>
+      <When condition={!login}>
+        <h1 className='welcome'>Welcome To My Site 👋</h1>
+        <p className='parg'>You shoud login to see our post and comment 😊</p>
 
-      <form onSubmit={Addpost} className='form'>
-        <label htmlFor="" className='yorttit'>YOR TITEL</label>
-        <input type="text" name='title' className='input' />
+        <div className='div-sing'>
 
-        <label htmlFor="" className='yorttit'>YOUR CONTENT</label>
-        <input type="text" name='content' className='input' />
+        <div className='Signup'>
+          <h1>Signup</h1>
+          <form action='' onSubmit={handleSignup} >
+            <input type="text" name='username' placeholder='userName' />
+            <input type="text" name='email' placeholder='email' />
+            <input type="text" name='password' placeholder='password' />
+            <input type="submit" value='signup' />
+          </form>
+        </div>
 
-        <input type="submit" value="Add post" className='sub' />
-      </form>
-      {
-        showdata &&
-        <Posts posts={posts} />
+        <div className='Login'>
+          <h1>Login</h1>
+          <form action='' onSubmit={handleLogin}>
+            <input type="text" name='email' placeholder='email' />
+            <input type="text" name='password' placeholder='password' />
+            <input type="submit" value='login' />
+          </form>
+        </div>
 
-      }
+        </div>
 
+      </When>
 
-    </div>
+      <When condition={login}>
+        <Datauser />
+      </When>
+
+    </>
 
   );
 }
