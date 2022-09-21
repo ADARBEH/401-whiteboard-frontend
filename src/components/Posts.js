@@ -6,7 +6,7 @@ import axios from 'axios';
 export default function Posts(props) {
 
   const handleDelete = async (id) => {
-  await axios.delete(`https://adarbeh-api.herokuapp.com/post/${id}`);
+  await axios.delete(`https://whiteboard-backend-ad.herokuapp.com/post/${id}`);
   }
   useEffect(() => {
     handleDelete();
@@ -20,7 +20,7 @@ export default function Posts(props) {
       petName: comment,
       ownerID:id
     }
-    const addcomment = await axios.post(`https://adarbeh-api.herokuapp.com/comment/`, newcomment);
+    const addcomment = await axios.post(`https://whiteboard-backend-ad.herokuapp.com/comment/`, newcomment);
     console.log(addcomment);
   }
   

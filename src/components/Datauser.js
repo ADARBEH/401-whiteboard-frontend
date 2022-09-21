@@ -7,7 +7,7 @@ function Datauser() {
   const [showdata, setShowdata] = useState(false);
 
   const getallPosts = async () => {
-    const allpost = await axios.get('https://adarbeh-api.herokuapp.com/post');
+    const allpost = await axios.get('https://whiteboard-backend-ad.herokuapp.com/post');
     setPosts(allpost.data);
     setShowdata(true)
 
@@ -22,7 +22,7 @@ function Datauser() {
       title: title,
       content: content
     }
-     await axios.post('https://adarbeh-api.herokuapp.com/post', newPost);
+     await axios.post('https://whiteboard-backend-ad.herokuapp.com/post', newPost);
     getallPosts();
   }
 
