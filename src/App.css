@@ -49,14 +49,23 @@
 .botempost{
   margin-top: 20px;
   margin-bottom: 20px;
-  background-color: #182236;
-  font-size: 20px;
+  background-color: rgb(150, 28, 226);
+  font-size: 17px;
   color: aliceblue;
-  padding: 10px;
+  border-radius: 1px;
+  width: 100%;
+  text-align: center;
+  border-width: 0ch;
+
+}
+.botempost:hover{
+  background-color: rgb(18, 102, 241);
+  color: aliceblue;
   border-radius: 10px;
   width: 100%;
   text-align: center;
-
+  cursor: pointer;
+  font-size: larger;
 }
 
 @keyframes App-logo-spin {

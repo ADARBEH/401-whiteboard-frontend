@@ -1,13 +1,21 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Posts from './Posts';
+import cookies from "react-cookies";
+
 
 function Datauser() {
   const [posts, setPosts] = useState([]);
   const [showdata, setShowdata] = useState(false);
 
+
   const getallPosts = async () => {
-    const allpost = await axios.get('https://whiteboard-backend-ad.herokuapp.com/post');
+    const allpost = await axios.get('https://whiteboard-backend-ad.herokuapp.com/post',
+      {
+        headers: {
+          Authorization: `Bearer ${cookies.load('token')}`
+        }
+      });
     setPosts(allpost.data);
     setShowdata(true)
 
@@ -22,7 +30,13 @@ function Datauser() {
       title: title,
       content: content
     }
-     await axios.post('https://whiteboard-backend-ad.herokuapp.com/post', newPost);
+    await axios.post('https://whiteboard-backend-ad.herokuapp.com/post', newPost,
+      {
+        headers: {
+          Authorization: `Bearer ${cookies.load('token')}`
+        }
+      }
+    );
     getallPosts();
   }
 

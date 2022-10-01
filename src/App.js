@@ -1,19 +1,15 @@
 
 import './App.css';
-import React, { useEffect } from 'react';
 import Datauser from './components/Datauser';
 import base64 from 'base-64';
 import { When } from 'react-if';
 import axios from 'axios';
-import { useState } from 'react';
-import { useCookies } from 'react-cookie';
+import cookies from "react-cookies";
+import React, { useEffect, useState } from 'react';
 
 
 function App() {
   const [login, setLogin] = useState(false);
-  const [cookies, setCookie] = useCookies(['user']);
-
-
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -21,7 +17,8 @@ function App() {
       const data = {
         userName: e.target.username.value,
         email: e.target.email.value,
-        password: e.target.password.value
+        password: e.target.password.value,
+        role: e.target.role.value
       };
       const signup = await axios.post('https://whiteboard-backend-ad.herokuapp.com/signup', data);
       console.log(signup.data);
@@ -39,28 +36,35 @@ function App() {
     };
 
     const encodedCredintial = base64.encode(`${data.username}:${data.password}`);
-    // console.log(`Basic ${encodedCredintial}`)
+
     axios.post('https://whiteboard-backend-ad.herokuapp.com/login', {}, {
       headers: {
         Authorization: `Basic ${encodedCredintial}`
       }
+
+    }).then(res => {
+      cookies.save('token', res.data.token);
+      cookies.save('role', res.data.role);
+      cookies.save('username', res.data.userName);
+      setLogin(true);
     })
-      .then(res => {
-        // console.log(res.data)
-        setCookie('token', res.data.token, { path: '/' });
-        setLogin(true);
-      })
       .catch(err => console.log(err));
   }
 
   useEffect(() => {
-    if (cookies.token) {
+    if (cookies.load('token')) {
       setLogin(true);
     }
-  }, [cookies.token]);
+  }, [
+    login
+  ]);
 
-  const logout = () => {
-    setCookie('token', '', { path: '/' });
+
+
+  function logout() {
+    cookies.remove('token');
+    cookies.remove('role');
+    cookies.remove('username');
     setLogin(false);
   }
 
@@ -80,6 +84,11 @@ function App() {
               <input type="text" name='username' placeholder='userName' />
               <input type="text" name='email' placeholder='email' />
               <input type="text" name='password' placeholder='password' />
+              <label for="cars">Choose a car:</label>
+              <select name="role" id="role">
+                <option value="user">user</option>
+                <option value="admin">admin</option>
+              </select>
               <input type="submit" value='signup' />
             </form>
           </div>
