@@ -1,19 +1,11 @@
 import './App.css';
-import Auth from './components/Auth';
-import AuthContextProvider from './context/AuthContext';
-
-
+import Authentication from './components/Authentication';
 
 
 function App() {
 
   return (
-
-    <AuthContextProvider>
-      <Auth />
-    </AuthContextProvider>
-
-
+    <Authentication />
   );
 }
 

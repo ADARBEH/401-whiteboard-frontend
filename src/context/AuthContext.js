@@ -1,16 +1,18 @@
-import { createContext, useState , useEffect , useContext } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import axios from 'axios';
 import cookies from "react-cookies";
 import base64 from 'base-64';
 
 
- const AuthContext = createContext();
- export const useAuth = () => useContext(AuthContext);
+const AuthContext = createContext();
+export const useAuth = () => useContext(AuthContext);
 
 const AuthContextProvider = props => {
 
 
     const [login, setLogin] = useState(false);
+    const [user, setUser] = useState([]);
+    const [capabilities, setCapabilities] = useState(false);
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -23,6 +25,7 @@ const AuthContextProvider = props => {
             };
             const signup = await axios.post('https://whiteboard-backend-ad.herokuapp.com/signup', data);
             console.log(signup.data);
+            setLogin(true);
         }
         catch (err) {
             console.log(err);
@@ -45,36 +48,42 @@ const AuthContextProvider = props => {
 
         }).then(res => {
             cookies.save('token', res.data.token);
-            cookies.save('role', res.data.role);
-            cookies.save('username', res.data.userName);
+            cookies.save('id', res.data.id);
+            if (res.data.capabilities.includes('delete')) {
+                setCapabilities(true);
+            }
             setLogin(true);
+
         })
             .catch(err => console.log(err));
     }
+  
+        useEffect(() => {
+            if (cookies.load('token')) {
+                setLogin(true);
+            }
+            
+        }, [
+            login
+        ]);
 
-    useEffect(() => {
-        if (cookies.load('token')) {
-            setLogin(true);
+
+
+
+        function logout() {
+            cookies.remove('token');
+            cookies.remove('id');
+            setUser({});
+            setLogin(false);
+            setCapabilities(false);
         }
-    }, [
-        login
-    ]);
 
-
-
-    function logout() {
-        cookies.remove('token');
-        cookies.remove('role');
-        cookies.remove('username');
-        setLogin(false);
+        const value = { login, setLogin, user,capabilities , handleSignup, handleLogin, logout };
+        return (
+            <AuthContext.Provider value={value}>
+                {props.children}
+            </AuthContext.Provider>
+        )
     }
 
-    const value = {login , handleSignup , handleLogin , logout};
-    return (
-        <AuthContext.Provider value={value}>
-            {props.children}
-        </AuthContext.Provider>
-    )
-}
-
-export default AuthContextProvider;
+    export default AuthContextProvider;

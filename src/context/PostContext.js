@@ -4,6 +4,7 @@ import cookies from "react-cookies";
 
 
 
+
 const PostContext = createContext();
 export const usePost = () => useContext(PostContext);
 
@@ -20,8 +21,9 @@ const PostontextProvider = props => {
                     Authorization: `Bearer ${cookies.load('token')}`
                 }
             });
-        setPosts(allpost.data);
         setShowdata(true)
+        setPosts(allpost.data);
+        console.log(allpost.data);
 
     }
 
@@ -32,7 +34,8 @@ const PostontextProvider = props => {
         const content = e.target.content.value;
         const newPost = {
             title: title,
-            content: content
+            content: content,
+            postid: cookies.load('id')
         }
         await axios.post('https://whiteboard-backend-ad.herokuapp.com/post', newPost,
             {
@@ -45,12 +48,12 @@ const PostontextProvider = props => {
     }
 
     useEffect(() => {
-        getallPosts();
+
     });
 
 
 
-    const value = {getallPosts , Addpost , posts , showdata};
+    const value = { getallPosts, Addpost, posts, showdata };
     return (
         <PostContext.Provider value={value}>
             {props.children}

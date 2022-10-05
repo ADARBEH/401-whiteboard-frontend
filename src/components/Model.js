@@ -14,6 +14,9 @@ import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import axios from 'axios';
 import cookies from "react-cookies";
 import '../App.css';
+import { usePost } from '../context/PostContext';
+
+
 
 
 export default function App(props) {
@@ -29,6 +32,8 @@ export default function App(props) {
   const onChangeMessage = (event: any) => {
     setVaryingMessage(event.target.value);
   };
+  const { getallPosts } = usePost();
+
 
 
 
@@ -48,10 +53,11 @@ export default function App(props) {
         }
       });
 
-      setVaryingModal(!varyingModal);
+    setVaryingModal(!varyingModal);
 
 
     console.log(update);
+    getallPosts();
   }
 
 
@@ -104,7 +110,7 @@ export default function App(props) {
               </form>
             </MDBModalBody>
             <MDBModalFooter>
-              <MDBBtn color='secondary' onClick={() => setVaryingModal(!varyingModal)}>
+              <MDBBtn  onClick={() => setVaryingModal(!varyingModal)}>
                 Close
               </MDBBtn>
               <MDBBtn onClick={() => change()} >Save changes</MDBBtn>
