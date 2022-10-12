@@ -10,7 +10,7 @@ import Datauser from './Datauser';
 
 function Authtest() {
 
-    const { login , handleSignup, handleLogin } = useAuth();
+    const { user , handleSignup, handleLogin } = useAuth();
 
 
     let [authMode, setAuthMode] = useState("signin")
@@ -19,7 +19,7 @@ function Authtest() {
         setAuthMode(authMode === "signin" ? "signup" : "signin")
     }
 
-    if (!login) {
+    if (!user.login) {
         if (authMode === "signin") {
             return (
                 <>
@@ -69,7 +69,7 @@ function Authtest() {
         }
     }
 
-    if (!login) {
+    if (!user.login) {
         return (
             <>
                 <h1 className='welcome'>Welcome To My Site 👋</h1>
@@ -136,7 +136,7 @@ function Authtest() {
         )
     }
 
-    if (login) {
+    if (user.login) {
         return (
             <div>
                 <Datauser />

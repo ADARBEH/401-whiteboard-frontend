@@ -1,17 +1,15 @@
 
 import React, { useEffect } from 'react'
 import axios from 'axios';
-import cookies from "react-cookies";
-import { useAuth } from '../context/AuthContext';
 import { usePost } from '../context/PostContext';
 import Model from './Model'
 
 
 
 
+
 export default function PostCard(props) {
 
-    const { capabilities  } = useAuth();
     const { getallPosts } = usePost();
 
 
@@ -21,7 +19,7 @@ export default function PostCard(props) {
         await axios.delete(`https://whiteboard-backend-ad.herokuapp.com/post/${id}`,
             {
                 headers: {
-                    Authorization: `Bearer ${cookies.load('token')}`
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             }
         );
@@ -87,7 +85,7 @@ export default function PostCard(props) {
                                     </div>
 
 
-                                    {(capabilities || cookies.load('id') === `${post.postid}`) &&
+                                    {(JSON.parse(localStorage.getItem('User')).id === post.postid || JSON.parse(localStorage.getItem('User')).capabilities.length === 4) &&
                                         <>
                                             <ul class="postcard__tagbox">
                                                 <button className='btn btn-primary' onClick={() => { handleDelete(post.id) }}>Delete Posts</button>

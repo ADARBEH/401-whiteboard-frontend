@@ -10,7 +10,7 @@ import {useEffect, } from 'react';
 
 function Datauser() {
 
-  const { Addpost, posts, showdata  } = usePost();
+  const { Addpost, posts } = usePost();
   const { logout , user } = useAuth();
   const { getallPosts } = usePost();
 
@@ -48,7 +48,7 @@ function Datauser() {
 
      
       {
-        showdata &&
+        (posts.length > 0)  &&
         <PostCard posts={posts} />
       }
       

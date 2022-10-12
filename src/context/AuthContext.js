@@ -1,7 +1,7 @@
-import { createContext, useState, useEffect, useContext } from "react";
-import axios from 'axios';
-import cookies from "react-cookies";
+import { createContext , useEffect, useContext, useReducer } from "react";
 import base64 from 'base-64';
+import { AuthReducer, intialStateAuth } from "../Reducers/AuthReducer";
+import { loginfun, logoutfun, signupfun, refreshfun } from "../Action/AuthAction";
 
 
 const AuthContext = createContext();
@@ -10,26 +10,20 @@ export const useAuth = () => useContext(AuthContext);
 const AuthContextProvider = props => {
 
 
-    const [login, setLogin] = useState(false);
-    const [user, setUser] = useState([]);
-    const [capabilities, setCapabilities] = useState(false);
+    const [user, dispatch] = useReducer(AuthReducer, intialStateAuth);
 
     const handleSignup = async (e) => {
         e.preventDefault();
-        try {
-            const data = {
-                userName: e.target.username.value,
-                email: e.target.email.value,
-                password: e.target.password.value,
-                role: e.target.role.value
-            };
-            const signup = await axios.post('https://whiteboard-backend-ad.herokuapp.com/signup', data);
-            console.log(signup.data);
-            setLogin(true);
-        }
-        catch (err) {
-            console.log(err);
-        }
+
+        const data = {
+            userName: e.target.username.value,
+            email: e.target.email.value,
+            password: e.target.password.value,
+            role: e.target.role.value
+        };
+
+        signupfun(dispatch, data);
+
     }
 
     const handleLogin = (e) => {
@@ -41,49 +35,33 @@ const AuthContextProvider = props => {
 
         const encodedCredintial = base64.encode(`${data.username}:${data.password}`);
 
-        axios.post('https://whiteboard-backend-ad.herokuapp.com/login', {}, {
-            headers: {
-                Authorization: `Basic ${encodedCredintial}`
-            }
+        loginfun(dispatch, encodedCredintial);
 
-        }).then(res => {
-            cookies.save('token', res.data.token);
-            cookies.save('id', res.data.id);
-            if (res.data.capabilities.includes('delete')) {
-                setCapabilities(true);
-            }
-            setLogin(true);
-
-        })
-            .catch(err => console.log(err));
     }
-  
-        useEffect(() => {
-            if (cookies.load('token')) {
-                setLogin(true);
-            }
-            
-        }, [
-            login
-        ]);
+
+    const logout = () => {
+        logoutfun(dispatch);
+    }
+
+    const refresh = async () => {
+        refreshfun(dispatch);
+    }
 
 
-
-
-        function logout() {
-            cookies.remove('token');
-            cookies.remove('id');
-            setUser({});
-            setLogin(false);
-            setCapabilities(false);
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            refresh();
+            console.log('refresh');
         }
+    }, [user.login])
+    
 
-        const value = { login, setLogin, user,capabilities , handleSignup, handleLogin, logout };
-        return (
-            <AuthContext.Provider value={value}>
-                {props.children}
-            </AuthContext.Provider>
-        )
-    }
+    const value = { user, handleSignup, handleLogin, logout };
+    return (
+        <AuthContext.Provider value={value}>
+            {props.children}
+        </AuthContext.Provider>
+    )
+}
 
-    export default AuthContextProvider;
+export default AuthContextProvider;

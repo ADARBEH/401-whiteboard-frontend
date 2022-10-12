@@ -49,7 +49,7 @@ export default function App(props) {
     const update = await axios.put(`https://whiteboard-backend-ad.herokuapp.com/post/${id}`, updatepost,
       {
         headers: {
-          Authorization: `Bearer ${cookies.load('token')}`
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
 
