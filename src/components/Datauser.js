@@ -1,21 +1,25 @@
+import { useEffect } from 'react';
+
 import { usePost } from '../context/PostContext';
 import { useAuth } from '../context/AuthContext';
-import "bootstrap/dist/css/bootstrap.min.css"
 import PostCard from './PostCard';
-import {useEffect, } from 'react';
 
+// import from chakra ui components
+import { Text, Button, HStack, Input, FormControl, FormLabel, FormHelperText } from '@chakra-ui/react';
 
-
+// import from react icons
+import { MdAddTask } from 'react-icons/md';
+import { RiLogoutBoxRLine } from 'react-icons/ri'
+import { IconContext } from 'react-icons'
 
 
 function Datauser() {
 
-  const { Addpost, posts } = usePost();
-  const { logout , user } = useAuth();
+  const { Addpost, posts, handleChangecontent, handleChangetitle, lodning } = usePost();
+  const { logout } = useAuth();
   const { getallPosts } = usePost();
 
 
-  
   useEffect(() => {
     getallPosts();
 
@@ -23,35 +27,56 @@ function Datauser() {
   });
 
 
-
-
-
   return (
 
     <div>
-      <nav className="navbar navbar-light bg-light">
-        
-          <img src="https://i.ibb.co/JkwNbbT/chat-logo-design-93835-108-removebg-preview.png" width="50" height="50" className="d-inline-block align-top" alt=''></img>
-          <h1 className='parg-login'>Give Me Post Mr {user.userName}</h1>
-          <button  className="btn btn-primary" onClick={logout}>Logout</button>
-      </nav>
 
-      <form onSubmit={Addpost} className='form'>
-        <label htmlFor="" className='yorttit'>Your Title</label>
-        <input type="text" name='title' className='input' />
+      <HStack spacing="24px" p={2}
+        bgGradient="linear(to-l, #7928CA,#FF0080)"
+        color="white"
+        alignItems="center"
+        justifyContent="space-between">
 
-        <label htmlFor="" className='yorttit'>Your Content</label>
-        <input type="text" name='content' className='input' />
+        <Text fontSize='4xl'
+          fontWeight='bold'
+          fontFamily='monospace'
+          letterSpacing='wide'
+          color='white'
+          ml={10}
 
-        <input type="submit" value="Add post" className='sub' />
-      </form>
+        >Give Me Post </Text>
 
-     
+        <IconContext.Provider value={{ style: { verticalAlign: 'middle', color: 'white', size: '3em', marginRight: '1em' } }}>
+          <RiLogoutBoxRLine size='2em' onClick={logout} />
+        </IconContext.Provider>
+
+      </HStack>
+
+      <HStack spacing="24px" p="10">
+
+        <FormControl id="first-name" isRequired>
+          <FormLabel>Title</FormLabel>
+          <Input onChange={handleChangetitle} name='title' placeholder="Your Title" variant='flushed' />
+          <FormHelperText>Required</FormHelperText>
+        </FormControl>
+
+        <FormControl id="first-name" isRequired>
+          <FormLabel>Content</FormLabel>
+          <Input onChange={handleChangecontent} name='content' placeholder="Your Content" variant='flushed' />
+          <FormHelperText>Required</FormHelperText>
+        </FormControl>
+
+        <Button isLoading={lodning} bgGradient="linear(to-l, #7928CA,#FF0080)"
+          className='sub' onClick={Addpost} ><MdAddTask size='4em' ></MdAddTask></Button>
+
+      </HStack>
+
+
       {
-        (posts.length > 0)  &&
+        (posts.length > 0) &&
         <PostCard posts={posts} />
       }
-      
+
     </div>
 
   );
