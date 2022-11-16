@@ -6,8 +6,14 @@ import reportWebVitals from './reportWebVitals';
 import AuthContextProvider from './context/AuthContext';
 import PostontextProvider from './context/PostContext';
 
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, extendTheme, ColorModeScript } from '@chakra-ui/react'
+import { myNewTheme } from './theme';
 
+const config = {
+  initialColorMode: 'light',
+  useSystemColorMode: false,
+}
+const theme = extendTheme({ config })
 
 
 
@@ -15,7 +21,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 
 
-  <ChakraProvider>
+  <ChakraProvider theme={myNewTheme}>
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+
 
     <React.StrictMode>
       <AuthContextProvider>
