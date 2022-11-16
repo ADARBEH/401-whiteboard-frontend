@@ -67,7 +67,7 @@ function Datauser() {
         </FormControl>
 
         <Button isLoading={lodning} bgGradient="linear(to-l, #7928CA,#FF0080)"
-          className='sub' onClick={Addpost} ><MdAddTask size='4em' ></MdAddTask></Button>
+          className='sub' onClick={Addpost} w='100px'h='50px' ><MdAddTask size='4em' ></MdAddTask></Button>
 
       </HStack>
 

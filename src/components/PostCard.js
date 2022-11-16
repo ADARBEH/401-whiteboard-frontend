@@ -81,6 +81,7 @@ export default function PostCard(props) {
 
     useEffect(() => {
         handleaddcomment();
+
     },)
 
 
@@ -92,6 +93,7 @@ export default function PostCard(props) {
             {
                 props.posts.map((post, idx) => {
                     return (
+
 
                         <VStack p="10" key={idx}
                             bgColor="blackAlpha.100"
@@ -112,31 +114,29 @@ export default function PostCard(props) {
                                 <Box>
                                     <HStack spacing="20px">
                                         <Image src="https://picsum.photos/500/501" boxSize="100px" borderRadius="50%" />
-                                        <Text fontSize='3xl'
-                                            fontWeight='bold'
-                                            fontFamily='Exo 2'
-                                            letterSpacing='wide'
-                                            color='black'
+                                        <Text textStyle='h1'
                                             marginLeft={104}
                                         >{post.title}</Text>
                                     </HStack>
                                 </Box>
 
-                                <Text color='blackAlpha.500'
-                                >{post.createdAt}</Text>
+                                <Text
+                                    textStyle='h2'
+                                >{String(post.createdAt).split('', 10)}</Text>
+
+
                             </HStack>
 
                             <HStack w='100%' >
-                                <Text fontSize='2xl'
+                                <Text
+                                    textStyle='h1'
                                     fontWeight='bold'
-                                    fontFamily='monospace'
-                                    letterSpacing='wide'
                                     color='black'
-                                    w='100%'
                                     display='flex'
                                     alignItems='left'
                                     text-align='left'
                                     marginLeft={10}
+
                                 >Content : {post.content}
                                 </Text>
                             </HStack>
@@ -164,58 +164,64 @@ export default function PostCard(props) {
                                                         {post.Comments.map((comment, idx) => {
                                                             return (
                                                                 <div key={idx} className='comment'>
-                                                                    <p>{comment.petName}</p>
+                                                                    <Text
+                                                                        textStyle='h2'
+                                                                    >{comment.petName}</Text>
                                                                 </div>
                                                             )
                                                         }
                                                         )}
-                                                    </div>
+                                            </div>
                                                 }
 
-                                                <FormControl id="first-name" isRequired>
+                                            <FormControl id="first-name" isRequired>
 
-                                                    <HStack w='100%'>
+                                                <HStack w='100%'>
 
-                                                        <Input onChange={handleChangetitle} name='title' w='100%' />
-                                                        <Button bg="gray"
-                                                            className='sub' onClick={(e) => { handleaddcomment(e, post.id) }}><BiSend size='1em' ></BiSend></Button>
-
-                                                    </HStack>
-
-                                                </FormControl>
-
-                                            </AccordionPanel>
-                                        </AccordionItem>
-                                    </Accordion>
-
-                                    {(JSON.parse(localStorage.getItem('User')).id === post.postid || JSON.parse(localStorage.getItem('User')).capabilities.length === 4) &&
-                                        <>
-                                            <Box>
-                                                <HStack>
-
-                                                    <Button onClick={() => { saveid(post.id) }}
-                                                        _hover={{ bg: 'gray' }}
-                                                    ><FiEdit size='2em' /></Button>
-
-                                                    <Button onClick={() => { handleDelete(post.id) }}
-                                                        _hover={{ bg: 'gray' }}
-                                                    ><MdDelete size='2em' /></Button>
+                                                    <Input onChange={handleChangetitle} name='title' w='100%' />
+                                                    <Button bg="gray"
+                                                        className='sub' onClick={(e) => { handleaddcomment(e, post.id) }}><BiSend size='1em' ></BiSend></Button>
 
                                                 </HStack>
-                                            </Box>
-                                        </>
-                                    }
+
+                                            </FormControl>
+
+                                        </AccordionPanel>
+                                    </AccordionItem>
+                                </Accordion>
+
+                                {(JSON.parse(localStorage.getItem('User')).id === post.postid || JSON.parse(localStorage.getItem('User')).capabilities.length === 4) &&
+                                    <>
+                                        <Box>
+                                            <HStack>
+
+                                                <Button onClick={() => { saveid(post.id) }}
+                                                    bg="secondary.100"
+                                                    variant={['sm', 'md', 'lg']}
+                                                    _hover={{ bg: 'gray' }}
+                                                ><FiEdit size='2em' /></Button>
+
+                                                <Button onClick={() => { handleDelete(post.id) }}
+                                                    bg="secondary.100"
+                                                    variant={['sm', 'md', 'lg']}
+                                                    _hover={{ bg: 'gray' }}
+                                                ><MdDelete size='2em' /></Button>
+
+                                            </HStack>
+                                        </Box>
+                                    </>
+                                }
 
 
-                                </HStack>
-                            </IconContext.Provider>
+                            </HStack>
+                        </IconContext.Provider>
 
 
 
                         </VStack>
 
-                    )
-                })
+    )
+})
             }
 
             <Modal
@@ -249,22 +255,22 @@ export default function PostCard(props) {
                 </ModalContent>
             </Modal>
 
-         
 
-                <Text fontSize='4xl'
-                    fontWeight='bold'
-                    fontFamily='monospace'
-                    letterSpacing='wide'
-                    color='white'
-                    alignItems='center'
-                    justifyContent='center'
-                    display='flex'
-                    bgGradient="linear(to-l, #7928CA,#FF0080)"
-                    bgClip="text"
 
-                ><p>&copy; 2022 Ibraheem AD</p></Text>
-                
-            </>
-            )
+            <Text fontSize='4xl'
+                fontWeight='bold'
+                fontFamily='monospace'
+                letterSpacing='wide'
+                color='white'
+                alignItems='center'
+                justifyContent='center'
+                display='flex'
+                bgGradient="linear(to-l, #7928CA,#FF0080)"
+                bgClip="text"
+
+            ><p>&copy; 2022 Ibraheem AD</p></Text>
+
+        </>
+    )
 }
 
