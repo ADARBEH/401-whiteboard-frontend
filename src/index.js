@@ -8,6 +8,8 @@ import PostontextProvider from './context/PostContext';
 
 import { ChakraProvider, extendTheme, ColorModeScript } from '@chakra-ui/react'
 import { myNewTheme } from './theme';
+import { Provider } from 'react-redux';
+import store from './app/store';
 
 const config = {
   initialColorMode: 'light',
@@ -22,13 +24,13 @@ root.render(
 
 
   <ChakraProvider theme={myNewTheme}>
-          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-
-
+    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
     <React.StrictMode>
       <AuthContextProvider>
         <PostontextProvider>
+          <Provider store={store}>
           <App />
+          </Provider>
         </PostontextProvider>
       </AuthContextProvider>
     </React.StrictMode>

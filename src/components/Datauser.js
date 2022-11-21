@@ -13,16 +13,42 @@ import { RiLogoutBoxRLine } from 'react-icons/ri'
 import { IconContext } from 'react-icons'
 
 
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getpostAsync, addpostAsync, showpost } from "../features/postSlicer";
+
+
+
 function Datauser() {
+
+
+
 
   const { Addpost, posts, handleChangecontent, handleChangetitle, lodning } = usePost();
   const { logout } = useAuth();
   const { getallPosts } = usePost();
 
 
-  useEffect(() => {
-    getallPosts();
+  //   some redux code
+  const post = useSelector(showpost);
+  const dispatch = useDispatch();
+  const [newpost, setNewpost] = useState({
+    title: "",
+    content: "",
+    postid: JSON.parse(localStorage.getItem('User')).id
 
+  });
+
+
+
+  const addNewpost = () => {
+    console.log(newpost);
+    dispatch(addpostAsync(newpost));
+  };
+
+
+  useEffect(() => {
+    dispatch(getpostAsync());
 
   });
 
@@ -56,25 +82,31 @@ function Datauser() {
 
         <FormControl id="first-name" isRequired>
           <FormLabel>Title</FormLabel>
-          <Input onChange={handleChangetitle} name='title' placeholder="Your Title" variant='flushed' />
+          <Input
+            onChange={(e) => setNewpost({ ...newpost, title: e.target.value })}
+
+            name='title' placeholder="Your Title" variant='flushed' />
           <FormHelperText>Required</FormHelperText>
         </FormControl>
 
         <FormControl id="first-name" isRequired>
           <FormLabel>Content</FormLabel>
-          <Input onChange={handleChangecontent} name='content' placeholder="Your Content" variant='flushed' />
+          <Input
+            onChange={(e) => setNewpost({ ...newpost, content: e.target.value })}
+
+            name='content' placeholder="Your Content" variant='flushed' />
           <FormHelperText>Required</FormHelperText>
         </FormControl>
 
         <Button isLoading={lodning} bgGradient="linear(to-l, #7928CA,#FF0080)"
-          className='sub' onClick={Addpost} w='100px'h='50px' ><MdAddTask size='4em' ></MdAddTask></Button>
+          className='sub' onClick={addNewpost} w='100px' h='50px' ><MdAddTask size='4em' ></MdAddTask></Button>
 
       </HStack>
 
 
       {
-        (posts.length > 0) &&
-        <PostCard posts={posts} />
+        (post.length > 0) &&
+        <PostCard posts={post[0]} />
       }
 
     </div>
